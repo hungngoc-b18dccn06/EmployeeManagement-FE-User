@@ -67,7 +67,10 @@ export const useCartItemStore = defineStore({
   actions: {
     async getListCart() {
         const listCart = await api.get(ApiConstant.LIST_CART_ITEM);
-        this.cart = listCart.data;
+        const current_id = localStorage.getItem("employeeId")
+        
+        const userCart = listCart.data.filter(item => item.employeeId == current_id);
+        this.cart = userCart;
     },
 
     async addToCart(data: FormData){

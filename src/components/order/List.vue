@@ -11,11 +11,16 @@ import { useProductStore } from '@/stores/product'
 import PAGE_ROUTE from '@/const/pageRoute'
 import { useI18n } from 'vue-i18n'
 import { useCartItemStore } from '@/stores/cart'
-
+import { useOrderStore } from '@/stores/order'
+import Momo from '../../assets/img/momoQR.jpg'
+import Cod from '../../assets/img/cod-delivery.avif'
+import { Field, useForm } from "vee-validate";
 import InputGroup from 'primevue/inputgroup'
 import InputGroupAddon from 'primevue/inputgroupaddon'
-
+import * as yup from "yup";
+const visible = ref(false)
 const storeCart = useCartItemStore()
+const storeOrder = useOrderStore()
 const toast = useToast()
 const { t } = useI18n()
 const products = ref(null)
@@ -91,7 +96,6 @@ const saveProduct = async () => {
   productDialog.value = false
 }
 const onUpload = (event) => {
-
   producImage.value = event.files
 }
 const editProduct = (editProduct) => {
@@ -118,6 +122,7 @@ const deleteProduct = async (id) => {
   closeModal()
   router.push({ path: PAGE_ROUTE.USER_LIST })
 }
+
 const loading = ref(false)
 
 const load = () => {
@@ -126,7 +131,7 @@ const load = () => {
     loading.value = false
   }, 2000)
 }
-const selectedMethod = ref()
+const selectedMethod = ref('momo')
 const findIndexById = (id) => {
   let index = -1
   for (let i = 0; i < products.value.length; i++) {
@@ -146,11 +151,25 @@ const createId = () => {
   }
   return id
 }
-
+const handlePayMent = () =>{
+  storeOrder.getOrders.methodPayment = selectedMethod.value
+}
+const schema = yup.object({
+    address: yup
+      .string()
+      .required(t('message.required'))
+      
+});
+const { values, errors, validate, handleSubmit } = useForm({
+    validationSchema: schema,
+});
+const tapToPay = handleSubmit(async (data) => {
+  visible.value = true
+});
 const exportCSV = () => {
   dt.value.exportCSV()
 }
-
+const visibility = ref()
 const confirmDeleteSelected = () => {
   deleteProductsDialog.value = true
 }
@@ -193,7 +212,7 @@ const totalAmount = computed(() => {
             <div
               class="flex flex-column md:flex-row md:justify-content-between md:align-items-center"
             >
-              <h2 class="m-0">{{ t('product.manageProduct') }}</h2>
+              <h2 class="m-0">{{ t('product.order') }}</h2>
               <span class="block mt-2 md:mt-0 p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText v-model="filters['global'].value" :placeholder="t('product.search')" />
@@ -323,34 +342,52 @@ const totalAmount = computed(() => {
       </div>
       <div class="">
         <Card>
-          <template #title> Total invoice </template>
+          <template #title> {{  t('employee.invoice') }} </template>
           <template #content>
             <InputGroup>
-              
-              <InputNumber placeholder="Enter employee code to receive discount code" />
+              <InputNumber :placeholder="t('employee.giftCode')" />
               <InputGroupAddon>Code</InputGroupAddon>
             </InputGroup>
             <div class="total-price">
               <div>
-                <p>DisCount:</p>
-                <p>Total Price:</p>
-                <p class="mt-3">Payment method</p>
+                  <p>{{ t('employee.discount') }} :</p>
+                  <p>{{ t('employee.toTalPrice') }}:</p>
+                  <p>{{ t('employee.Address') }} :</p>
+                <p class="mt-7">{{ t('employee.paymentMethod') }}</p>
               </div>
               <div>
                 <p>10%</p>
                 <p>{{ totalAmount * 0.9 }} $</p>
-                <div class="card flex justify-content-center mt-3">
+                <p>
+                  <span class="p-input-icon-right">
+                    <Field name="address" v-slot="{meta: metaField, field, errorMessage}">
+                              <InputText
+                                  v-bind="field"
+                                  type="text"
+                                  v-model="storeOrder.getOrders.address"
+                                  :class="{'p-invalid': errorMessage && !metaField.valid && metaField.touched}"
+                                  :placeholder="t('employee.Address') "
+                                  autocomplete="off"
+                              />
+                              <div class="absolute line-height-1 pt-2">
+                                <small v-if="errorMessage && !metaField.valid && metaField.touched" class="p-error">{{ errorMessage }}</small>
+                              </div>
+                          </Field>
+                   
+                  </span>
+                </p>
+                <div class="card flex justify-content-center mt-5">
                   <div class="card flex justify-content-center">
                     <div class="flex flex-column gap-3">
                       <div class="flex align-items-center">
-                        <RadioButton v-model="selectedMethod" inputId="momo" value="momo" />
+                        <RadioButton v-model="selectedMethod" inputId="momo" value="momo" @change="handlePayMent" />
                         <img src="../../assets/img/momo.webp" class="momo-wallet" />
-                        <label for="momo">Momo E-wallet</label>
+                        <label for="momo">{{ t('employee.momo') }}</label>
                       </div>
                       <div class="flex align-items-center">
-                        <RadioButton v-model="selectedMethod" inputId="cod" value="cod" />
+                        <RadioButton v-model="selectedMethod" inputId="cod" value="cod"  @change="handlePayMent"  />
                         <img src="../../assets/img/code.png" class="cod-wallet" />
-                        <label for="cod" class="ml-2">Cash on delivery</label>
+                        <label for="cod" class="ml-2">{{ t('employee.cod') }}</label>
                       </div>
                     </div>
                   </div>
@@ -362,9 +399,45 @@ const totalAmount = computed(() => {
               label="Tap To Pay"
               icon="pi pi-credit-card mr-2"
               :loading="loading"
-              @click="load"
+              @click="tapToPay()"
               class="payment"
             />
+            <Dialog
+              v-model:visible="visible"
+              modal
+              :header="t('product.noteConfirmOrder')"
+              :style="{ width: '50rem' }"
+              :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+            >
+              <img v-if="storeOrder.getOrders.methodPayment == 'momo'" :src="Momo" class="pay_momo" />
+              <img v-if="storeOrder.getOrders.methodPayment == 'cod'" :src="Cod" class="pay_momo" />
+              <div class="flex info-payment">
+                <div class="info-title">
+                  <p>{{ t('employee.discount') }} :</p>
+                  <p>{{ t('employee.toTalPrice') }}:</p>
+                  <p>{{ t('employee.Address') }} :</p>
+                </div>
+                <div class="info-title">
+                  <p>10%</p>
+                  <p>{{ totalAmount * 0.9 }} $</p>
+                  <p>{{ storeOrder.getOrders.address }}</p>
+                </div>
+              </div>
+              <template #footer>
+                <Button
+                  :label="t('product.no')"
+                  icon="pi pi-times"
+                  class="p-button-text"
+                  @click="visible = false"
+                />
+                <Button
+                  :label="t('product.yes')"
+                  icon="pi pi-check"
+                  class="p-button-text"
+                  @click="purchaseOrder()"
+                />
+              </template>
+            </Dialog>
           </template>
         </Card>
       </div>
@@ -373,8 +446,24 @@ const totalAmount = computed(() => {
 </template>
 
 <style scoped>
+.pay_momo {
+  width: 50%;
+  margin: auto;
+  display: block;
+}
 textarea#description {
   height: 120px !important;
+}
+.info-title p {
+  font-weight: bold;
+  font-size: 20px;
+}
+.flex.info-payment {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  font-weight: bolder;
+  margin-top: 20px;
 }
 button.p-button.p-component.p-button-icon-only.p-button-danger.p-button-rounded.p-button-text.p-fileupload-file-remove {
   background: #fff;

@@ -25,6 +25,8 @@ const ProductLang = {
     yes: "예",
     totalprice: '총 가격',
     lgEcommerce: "LG전자상거래",
-    totalPrice: "총 가격"
+    totalPrice: "총 가격",
+    order:"주문 정보",
+    noteConfirmOrder: "결제문의주세요!!"
 };
 export default ProductLang;

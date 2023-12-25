@@ -19,12 +19,13 @@
                   :src="selectedLanguage.imgSrc"
                   alt=""
                   class="img-language"
-                  style="height: 35px; width: 35px"
+                  style="height: 30px; width: 35px;margin-top: 5px;"
                 />
               </div>
-              <Dropdown
+              <div class="drop-multil-language">
+                <Dropdown
                 v-if="showDropdown"
-                class="drop-multil-language"
+                
                 v-model="selectedLanguage"
                 :options="OPTION_LANGUAGE"
                 option-label="label"
@@ -35,11 +36,13 @@
                     :src="option.imgSrc"
                     alt=""
                     class="img-language"
-                    style="height: 35px; width: 40px"
+                    style="height: 25px; width: 40px"
                   />
                   {{ option.label }}
                 </template>
               </Dropdown>
+              </div>
+              
               <div class="badges cart-order">
                 <i
                   badge="2"
@@ -158,6 +161,7 @@ const OPTION_LANGUAGE = [
   { label: '한국어', value: 'kor', imgSrc: kor },
   { label: 'English', value: 'en', imgSrc: en }
 ]
+
 const showDropdown = ref(false)
 const toggle = (event: any) => {
   menu.value.toggle(event)
@@ -178,7 +182,13 @@ const editProfile = () => {
   console.log(userStore.getProfile)
   router.push(`/profile`)
 }
+const goToOrder = () =>{
+  router.push(`/order_detail`);
+  op.value.hide();
+  
+}
 const storeCart = useCartItemStore()
+const cart = storeCart.getCart;
 const items = ref([
   {
     items: [
@@ -257,7 +267,6 @@ onMounted(() => {
 img.img-language {
   width: 30px;
   height: 30px;
-  border-radius: 50%;
 }
 .p-selectbutton.p-buttonset.p-component {
   border: 1px solid #2b9dca;
@@ -323,5 +332,11 @@ button.p-button.p-component.p-button-text.shadow-none {
 .header-cart {
     display: flex;
     gap: 10px;
+}
+div#list-box {
+    max-height: 520px;
+}
+span.p-dropdown-label.p-inputtext {
+    padding: 8px !important;
 }
 </style>

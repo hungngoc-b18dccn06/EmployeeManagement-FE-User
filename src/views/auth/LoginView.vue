@@ -160,7 +160,6 @@ const { t } = useI18n();
   });
   
   async function loginSuccessCallback(accessToken: string) {
-    console.log(accessToken)
     localStorage.setItem(ACCESS_TOKEN, accessToken.replace(/[{()}]/g, "").replace(/^.*token=/, ""));
     router.push('/');
   }

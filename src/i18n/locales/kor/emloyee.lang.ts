@@ -33,6 +33,14 @@ const EmployeeLang = {
     password_confirm: '비밀번호 확인',
     reload: '재장전하다',
     excelName: '직원 관리',
+    discount: "할인",
+    toTalPrice: "총 가격",
+    Address: "배달 주소",
+    paymentMethod: "결제수단",
+  momo: "모모 전자지갑",
+  cod: "대금 상환",
+  invoice: "총 청구서",
+  giftCode: "할인코드를 받으려면 직원코드를 입력하세요",
   };
   export default EmployeeLang;
   

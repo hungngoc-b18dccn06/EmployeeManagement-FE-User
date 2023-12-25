@@ -25,7 +25,9 @@ const ProductLang = {
     dragFile: "Drag and drop files to here to upload",
     totalprice: 'Total price',
     lgEcommerce: "LG Ecommerce",
-    totalPrice: "Total Price"
+    totalPrice: "Total Price",
+    order:"Order Infomation",
+    noteConfirmOrder: "Please inquire for payment !!"
 };
 export default ProductLang;
   
