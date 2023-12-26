@@ -90,6 +90,8 @@ const saveProduct = async () => {
   formData.append('average_rating', 5)
   formData.append('file', producImage.value[0])
   formData.append('code', 111)
+
+  console.log(formData)
   const res = await storeProduct.apiCreateProduct(formData)
   toast.add({
     group: 'message',
@@ -210,18 +212,23 @@ const totalAmount = computed(() => {
     return total + product.quantity * product.productPrice
   }, 0)
 })
+const getCurrentDate = () => {
+  const currentDate = new Date();
+  return currentDate;
+};
 
 const purchaseOrder = async() => {
-  const formData = new FormData();
-  formData.append("employeeId", storeEmployee.getProfile.employeeid);
-  formData.append("cartItemId", storeCart.getCart[0].cartItemId);
-  formData.append("totalPrice", totalAmount.value);
-  formData.append("methodPayment", selectedMethod.value);
-  formData.append("orderStatus", 1);
 
-  // const response = await storeOrder.apiPurchaseOrder(newData)
+  storeOrder.getFormOrder.employeeId = storeEmployee.getProfile.employeeid;
+  storeOrder.getFormOrder.cartItemId = storeCart.getCart[0].cartItemId;
+  storeOrder.getFormOrder.totalPrice = totalAmount.value;
+  storeOrder.getFormOrder.methodPayment = selectedMethod.value;
+  storeOrder.getFormOrder.orderStatus = 1;
+  storeOrder.getFormOrder.orderDate = getCurrentDate();
+  storeOrder.getFormOrder.address = storeOrder.getOrders.address;
+  console.log(storeOrder.getFormOrder)
+  const response = await storeOrder.apiPurchaseOrder(storeOrder.getFormOrder)
 
-  console.log(formData)
 
   toast.add({
     group: 'message',

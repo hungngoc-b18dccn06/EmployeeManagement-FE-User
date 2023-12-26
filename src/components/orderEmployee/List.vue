@@ -58,7 +58,6 @@ const addToCart = async (e) => {
   formData.append('employeeId', storeEmployee.getProfile.id)
   formData.append('productId', e.id)
   formData.append('quantity', 1)
-
   const res = await storeCart.addToCart(formData)
   storeCart.getListCart()
   toast.add({
