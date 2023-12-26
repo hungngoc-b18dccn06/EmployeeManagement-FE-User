@@ -238,7 +238,7 @@ const purchaseOrder = async() => {
     closable: false
   })
   visible.value = false;
-
+  storeCart.getListCart();
 }
 </script>
 
@@ -389,8 +389,8 @@ const purchaseOrder = async() => {
           </template>
         </Dialog>
       </div>
-      <div class="">
-        <Card>
+      <div>
+        <Card v-if="storeCart.getCart[0].status == 0">
           <template #title> {{  t('employee.invoice') }} </template>
           <template #content>
             <InputGroup>
@@ -490,7 +490,8 @@ const purchaseOrder = async() => {
             </Dialog>
           </template>
         </Card>
-        <div class="card-steps">
+        <div class="card-steps mt-3" v-if="storeCart.getCart[0].status == 1">
+          <span class="delivery-info">DELIVER INFOMATION :</span>
            <Steps :model="items"  />
         </div>
       </div>
@@ -499,7 +500,12 @@ const purchaseOrder = async() => {
 </template>
 
 <style scoped>
-
+.delivery-info{
+  color: red;
+  text-decoration: underline;
+    font-size: 20px;
+    font-weight: bold;
+}
 .card-steps {
     max-width: 1000px;
     margin: auto;
