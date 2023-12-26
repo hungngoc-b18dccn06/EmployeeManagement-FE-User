@@ -92,4 +92,8 @@ export const DELETE_PRODUCT =  (id: number) => `/api/product/delete/${id}`;
 export const ADD_TO_CART =  `/api/cart/add`;
 export const LIST_CART_ITEM =  `/api/cart/cart-items`;
 
+//order:
+export const PURCHASE_ORDER =  `/api/cart/purchaseOrder`;
+
+
 

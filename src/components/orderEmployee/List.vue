@@ -93,11 +93,8 @@ function calculateTotalQuantity() {
 }
 const toggleAlt = (event) => {
   op.value.toggle(event)
-  console.log(listItem)
 }
-const goToOrder = () =>{
-  router.push(`/order_detail`);
-}
+
 </script>
 
 <template>

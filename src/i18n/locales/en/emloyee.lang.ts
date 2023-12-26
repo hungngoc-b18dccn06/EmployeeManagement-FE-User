@@ -31,7 +31,17 @@ const EmployeeLang = {
   excelName: 'Employee Management',
   reload: 'Reload',
   password:"password",
-    password_confirm: 'password confirm',
+  password_confirm: 'password confirm',
+  discount: "Disount",
+  toTalPrice: "Total Price",
+  Address: "Delivery Address",
+  paymentMethod: "Payment Method",
+  momo: "Momo E-wallet",
+  cod: "Cash On Delivery",
+  invoice: "Total invoice",
+  giftCode: "Enter employee code to receive discount code",
+  
+
   };
   export default EmployeeLang;
   

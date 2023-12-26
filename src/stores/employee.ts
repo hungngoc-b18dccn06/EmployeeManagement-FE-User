@@ -160,6 +160,7 @@ export const useUserStore = defineStore({
                     const response = await api.get(ApiConstant.GET_PROFILE, {headers});
                     this.profile = response.data;
                     this.current_name = response.data.employeename;
+                    localStorage.setItem("employeeId", response.data.id);
                     return response
               } catch (err) {
                 console.log(err);

@@ -220,3 +220,7 @@ button.p-button.p-component.go_order{
 button.p-button.p-component.btn-cancel.p-button-secondary.mx-3 {
   color: #fff;
 }
+
+span.p-dropdown-label.p-inputtext {
+  padding: 7px;
+}
