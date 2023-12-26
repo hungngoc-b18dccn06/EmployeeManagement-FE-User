@@ -95,13 +95,13 @@
                 @row-click="gotToDetail($event)" :rowHover="true" responsive-layout="scroll">
                 <Column style="padding-left:2rem; margin:auto" v-for="col in translatedColumns" :key="col.field" :field="col.field"
                     :header="col.header" :sortable="true"></Column>
-                <Column headerStyle=" text-align: center" bodyStyle="text-align: center; overflow: visible">
+                <!-- <Column headerStyle=" text-align: center" bodyStyle="text-align: center; overflow: visible">
                     <template #body="slotProps">
                         <Button class="p-button-danger p-button-sm white-space-nowrap" icon="pi pi-trash"
                             v-if="slotProps.data.email !== storeUser.getProfile.email"
                             @click="deleteUser(slotProps.data.id)" :label="t('common.delete')"></Button>
                     </template>
-                </Column>
+                </Column> -->
                 <template #empty>
                     <div class="text-center">{{ $t('user.userNotFound') }}</div>
                 </template>

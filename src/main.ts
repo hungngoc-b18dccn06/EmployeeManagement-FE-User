@@ -42,7 +42,7 @@ import "primeicons/primeicons.css";
 import "primevue/resources/themes/lara-light-blue/theme.css";
 import "@/assets/main.css";
 import i18n from "@/i18n";
-
+import Steps from 'primevue/steps';
 const app = createApp(App);
 
 configure({
@@ -235,6 +235,7 @@ app.component("InputMask", InputMask);
 app.component("InputNumber", InputNumber);
 app.component("Dialog", Dialog);
 app.component("Avatar", Avatar);
+app.component("Steps",Steps);
 app.component("Image", Image);
 app.component("Badge", Badge);
 app.component("Menu", Menu);

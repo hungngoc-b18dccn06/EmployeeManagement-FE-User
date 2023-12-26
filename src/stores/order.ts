@@ -78,7 +78,7 @@ export const useOrderStore = defineStore({
     getFormProduct: (state) => state.formPurchase
   },
   actions: {
-    async apiPurchaseOrder(data: formPurchase){
+    async apiPurchaseOrder(data: FormData){
         const res = api.post(ApiConstant.PURCHASE_ORDER, data);
        return res
     },  

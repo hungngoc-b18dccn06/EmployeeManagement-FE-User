@@ -149,7 +149,7 @@ const { t } = useI18n();
       if(reponse.data.statusCodeValue == 401){
         toast.add({ group: "message", severity: "error", summary: reponse.data.body, life: CONST.TIME_DELAY, closable: false });
       }else{
-        toast.add({ group: "message", severity: "success", summary: "Login Success !", life: CONST.TIME_DELAY, closable: false });
+        toast.add({ group: "message", severity: "success", summary: "Welcome to the LG CNS !", life: CONST.TIME_DELAY, closable: false });
         await loginSuccessCallback(reponse.data.body);
       }
     } catch (e:any) {

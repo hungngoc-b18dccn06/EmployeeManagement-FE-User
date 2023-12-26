@@ -224,3 +224,14 @@ button.p-button.p-component.btn-cancel.p-button-secondary.mx-3 {
 span.p-dropdown-label.p-inputtext {
   padding: 7px;
 }
+span.p-menuitem-link {
+  padding-top: 25px !important;
+  width: 100px;
+}
+span.p-steps-title {
+  position: relative;
+}
+
+ol.p-steps-list {
+  position: static !important;
+}

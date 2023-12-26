@@ -88,6 +88,7 @@ defineExpose({
                 :placeholder="t('employee.employee_name')"
                 v-bind="field"
                 :modelValue="value"
+                disabled="true"
               />
             </div>
             <ErrorMessage class="subtext p-error absolute pt-1" name="employeename" />
@@ -104,6 +105,7 @@ defineExpose({
             name="email"
             v-slot="{ field, value }"
             v-model="storeUser.getFormUser.email"
+          
           >
             <div class="p-inputgroup">
               <InputText
@@ -111,6 +113,7 @@ defineExpose({
                 :placeholder="t('user.emailAdress')"
                 v-bind="field"
                 :modelValue="value"
+                disabled="true"
               />
             </div>
             <ErrorMessage class="subtext p-error absolute pt-1" name="email" />
@@ -134,6 +137,7 @@ defineExpose({
                 :placeholder="t('employee.employeeid')"
                 v-bind="field"
                 :modelValue="value"
+                disabled="true"
               />
             </div>
             <ErrorMessage class="subtext p-error absolute pt-1" name="employeeid" />
@@ -157,6 +161,7 @@ defineExpose({
                 :placeholder="t('employee.phone')"
                 v-bind="field"
                 :modelValue="value"
+                disabled="true"
               />
             </div>
             <ErrorMessage class="subtext p-error absolute pt-1" name="phone" />
@@ -185,6 +190,7 @@ defineExpose({
                       v-bind="field"
                       :value="ele.value"
                       :modelValue="value"
+                      disabled="true"
                     />
                     <span class="px-2">{{ ele.label }}</span>
                   </label>
@@ -217,6 +223,7 @@ defineExpose({
                       v-bind="field"
                       :value="ele.value"
                       :modelValue="value"
+                      disabled="true"
                     />
                     <span class="px-2">{{ ele.label }}</span>
                   </label>
@@ -229,12 +236,12 @@ defineExpose({
       </div>
     </div>
   </div>
-  <FooterCommon
+  <!-- <FooterCommon
     :labelSubmit="t('common.register')"
     :labelCancel="t('common.back')"
     :submit="handleSubmit"
     :cancel="handleBack"
-  />
+  /> -->
 </template>
 <style scoped>
   .layout-wrapper .p-error{
