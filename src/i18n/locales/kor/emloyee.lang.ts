@@ -41,6 +41,9 @@ const EmployeeLang = {
   cod: "대금 상환",
   invoice: "총 청구서",
   giftCode: "할인코드를 받으려면 직원코드를 입력하세요",
+  created_at: "생성_시간",
+  date_of_birth: "생일",
+  createdAt: "생성_시간",
   };
   export default EmployeeLang;
   

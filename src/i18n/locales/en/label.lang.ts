@@ -42,7 +42,8 @@ const LabelLang = {
   login: "Login",
   regist_new_mem: "Register New Member",
   back_logn: 'Back To Login',
-  goToOrder: "Go To Order"
+  goToOrder: "Go To Order",
+  back_login: "Back To Login Page"
 };
 
 export default LabelLang;
