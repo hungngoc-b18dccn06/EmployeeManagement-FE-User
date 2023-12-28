@@ -8,6 +8,7 @@ import Rating from 'primevue/rating'
 import Tag from 'primevue/tag'
 import CONST, { AppConstant, DEFAULT } from '@/const'
 import { useProductStore } from '@/stores/product'
+import { useUserStore } from '@/stores/employee'
 import PAGE_ROUTE from '@/const/pageRoute'
 import { useI18n } from 'vue-i18n'
 import { useCartItemStore } from '@/stores/cart'
@@ -17,10 +18,13 @@ import Cod from '../../assets/img/cod-delivery.avif'
 import { Field, useForm } from "vee-validate";
 import InputGroup from 'primevue/inputgroup'
 import InputGroupAddon from 'primevue/inputgroupaddon'
+import Steps from 'primevue/steps';
+
 import * as yup from "yup";
 const visible = ref(false)
 const storeCart = useCartItemStore()
 const storeOrder = useOrderStore()
+const storeEmployee = useUserStore()
 const toast = useToast()
 const { t } = useI18n()
 const products = ref(null)
@@ -46,6 +50,7 @@ onBeforeMount(() => {
 
 onMounted(() => {
   products.value = storeProduct.getProducts
+  storeOrder.getOrders.methodPayment = selectedMethod.value
   storeProduct.getListProduct()
   storeCart.getListCart()
 })
@@ -85,6 +90,8 @@ const saveProduct = async () => {
   formData.append('average_rating', 5)
   formData.append('file', producImage.value[0])
   formData.append('code', 111)
+
+  console.log(formData)
   const res = await storeProduct.apiCreateProduct(formData)
   toast.add({
     group: 'message',
@@ -131,6 +138,7 @@ const load = () => {
     loading.value = false
   }, 2000)
 }
+const addressToOrder = ref();
 const selectedMethod = ref('momo')
 const findIndexById = (id) => {
   let index = -1
@@ -142,7 +150,20 @@ const findIndexById = (id) => {
   }
   return index
 }
-
+const items = ref([
+    {
+        label: 'Unpaid'
+    },
+    {
+        label: 'To Ship'
+    },
+    {
+        label: 'Shipped'
+    },
+    {
+        label: 'To review'
+    }
+]);
 const createId = () => {
   let id = ''
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -191,6 +212,34 @@ const totalAmount = computed(() => {
     return total + product.quantity * product.productPrice
   }, 0)
 })
+const getCurrentDate = () => {
+  const currentDate = new Date();
+  return currentDate;
+};
+
+const purchaseOrder = async() => {
+
+  storeOrder.getFormOrder.employeeId = storeEmployee.getProfile.employeeid;
+  storeOrder.getFormOrder.cartItemId = storeCart.getCart[0].cartItemId;
+  storeOrder.getFormOrder.totalPrice = totalAmount.value;
+  storeOrder.getFormOrder.methodPayment = selectedMethod.value;
+  storeOrder.getFormOrder.orderStatus = 1;
+  storeOrder.getFormOrder.orderDate = getCurrentDate();
+  storeOrder.getFormOrder.address = storeOrder.getOrders.address;
+  console.log(storeOrder.getFormOrder)
+  const response = await storeOrder.apiPurchaseOrder(storeOrder.getFormOrder)
+
+
+  toast.add({
+    group: 'message',
+    severity: 'success',
+    summary: t('notifile.addCartSucceess'),
+    life: CONST.TIME_DELAY,
+    closable: false
+  })
+  visible.value = false;
+  storeCart.getListCart();
+}
 </script>
 
 <template>
@@ -340,8 +389,8 @@ const totalAmount = computed(() => {
           </template>
         </Dialog>
       </div>
-      <div class="">
-        <Card>
+      <div>
+        <Card v-if="storeCart.getCart[0].status == 0">
           <template #title> {{  t('employee.invoice') }} </template>
           <template #content>
             <InputGroup>
@@ -409,8 +458,9 @@ const totalAmount = computed(() => {
               :style="{ width: '50rem' }"
               :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
             >
-              <img v-if="storeOrder.getOrders.methodPayment == 'momo'" :src="Momo" class="pay_momo" />
-              <img v-if="storeOrder.getOrders.methodPayment == 'cod'" :src="Cod" class="pay_momo" />
+              <img v-if="storeOrder.getOrders.methodPayment == 'momo'" :src="Momo" class="pay_momo pb-5" />
+              <img v-if="storeOrder.getOrders.methodPayment == 'cod'" :src="Cod" class="pay_momo pb-5" />
+              <span class="invoice">{{  t('employee.invoice') }} :</span>
               <div class="flex info-payment">
                 <div class="info-title">
                   <p>{{ t('employee.discount') }} :</p>
@@ -440,12 +490,45 @@ const totalAmount = computed(() => {
             </Dialog>
           </template>
         </Card>
+        <div class="card-steps mt-3" v-if="storeCart.getCart[0].status == 1">
+          <span class="delivery-info">DELIVER INFOMATION :</span>
+           <Steps :model="items"  />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+.delivery-info{
+  color: red;
+  text-decoration: underline;
+    font-size: 20px;
+    font-weight: bold;
+}
+.card-steps {
+    max-width: 1000px;
+    margin: auto;
+    border: 1px solid #e5e7eb;
+    border-width: 0 0 1px 0;
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-bottom: 20px;
+    box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.102);
+    border-radius: 10px;
+    background-color: #fff;
+}
+nav.p-steps.p-component.p-readonly {
+    padding-right: 100px;
+}
+
+span.invoice {
+    font-size: 25px;
+    color: red;
+    font-weight: bold;
+    margin-left: 11%;
+    text-decoration: underline;
+}
 .pay_momo {
   width: 50%;
   margin: auto;
@@ -455,7 +538,7 @@ textarea#description {
   height: 120px !important;
 }
 .info-title p {
-  font-weight: bold;
+  
   font-size: 20px;
 }
 .flex.info-payment {

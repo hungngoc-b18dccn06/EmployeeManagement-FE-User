@@ -137,7 +137,8 @@ export const useUserStore = defineStore({
             
             this.users = listUser.data.content.map(e => ({
                 ...e,
-                status: e.status === 1 ? "active" : e.status === 0 ? "inactive" : e.status
+                status: e.status === 1 ? "active" : e.status === 0 ? "inactive" : e.status,
+                createdAt: new Date(e.createdAt).toISOString().split('T')[0],
             }));
             
             this.pagination = {

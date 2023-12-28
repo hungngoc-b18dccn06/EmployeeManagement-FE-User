@@ -13,7 +13,7 @@
                 <Field name="employeeid" v-slot="{ meta: metaField, field, errorMessage }">
                   <div class="p-inputgroup common-group">
                     <div class="title-card col-4">
-                      <label class="title-field mt-2 required">{{
+                      <label class="title-field mt-2">{{
                         t('employee.employeeid')
                       }}</label>
                     </div>
@@ -40,7 +40,7 @@
                 <Field name="email" v-slot="{ meta: metaField, field, errorMessage }">
                   <div class="p-inputgroup common-group">
                     <div class="title-card col-4">
-                      <label class="title-field mt-2 required">{{ t('user.emailAdress') }}</label>
+                      <label class="title-field mt-2">{{ t('user.emailAdress') }}</label>
                     </div>
                     <InputText
                       v-bind="field"
@@ -65,7 +65,7 @@
                 <Field name="password" v-slot="{ meta: metaField, field, errorMessage }">
                   <div class="p-inputgroup common-group">
                     <div class="title-card col-4">
-                      <label class="title-field mt-2 required">{{ t('employee.password') }}</label>
+                      <label class="title-field mt-2">{{ t('employee.password') }}</label>
                     </div>
                     <span class="p-input-icon-right w-full">
                       <InputText
@@ -96,7 +96,7 @@
                 <Field name="password_confirm" v-slot="{ meta: metaField, field, errorMessage }">
                   <div class="p-inputgroup common-group">
                     <div class="title-card col-4">
-                      <label class="title-field mt-2 required">{{ t('employee.password') }}</label>
+                      <label class="title-field mt-2">{{ t('employee.password') }}</label>
                     </div>
                     <span class="p-input-icon-right w-full">
                       <InputText
@@ -128,7 +128,7 @@
                 <Field name="employeename" v-slot="{ meta: metaField, field, errorMessage }">
                   <div class="p-inputgroup common-group">
                     <div class="title-card col-4">
-                      <label class="title-field mt-2 required">{{
+                      <label class="title-field mt-2">{{
                         t('employee.employee_name')
                       }}</label>
                     </div>
@@ -156,7 +156,7 @@
                 <Field name="phone" v-slot="{ meta: metaField, field, errorMessage }">
                   <div class="p-inputgroup common-group">
                     <div class="title-card col-4">
-                      <label class="title-field mt-2 required">{{ t('user.phone') }}</label>
+                      <label class="title-field mt-2">{{ t('user.phone') }}</label>
                     </div>
                     <InputText
                       v-bind="field"

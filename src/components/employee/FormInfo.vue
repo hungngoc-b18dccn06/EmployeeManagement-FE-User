@@ -72,7 +72,7 @@ defineExpose({
     <div class="col-10">
       <div class="grid mt-3">
         <div class="title-card col-4">
-          <label class="title-field mt-2 required">{{t('employee.employee_name')}}</label>
+          <label class="title-field mt-2">{{t('employee.employee_name')}}</label>
         </div>
         <div class="col-4">
           <label class="d-block mb-1 font-weight-bold">{{t('employee.employee_name')}}</label>
@@ -88,6 +88,7 @@ defineExpose({
                 :placeholder="t('employee.employee_name')"
                 v-bind="field"
                 :modelValue="value"
+                disabled="true"
               />
             </div>
             <ErrorMessage class="subtext p-error absolute pt-1" name="employeename" />
@@ -96,7 +97,7 @@ defineExpose({
       </div>
       <div class="grid mt-6">
         <div class="title-card col-4">
-          <label class="title-field inline-block mt-2 required">{{ t('user.emailAdress') }}</label>
+          <label class="title-field inline-block mt-2">{{ t('user.emailAdress') }}</label>
         </div>
         <div class="col-8">
           <Field
@@ -104,6 +105,7 @@ defineExpose({
             name="email"
             v-slot="{ field, value }"
             v-model="storeUser.getFormUser.email"
+          
           >
             <div class="p-inputgroup">
               <InputText
@@ -111,6 +113,7 @@ defineExpose({
                 :placeholder="t('user.emailAdress')"
                 v-bind="field"
                 :modelValue="value"
+                disabled="true"
               />
             </div>
             <ErrorMessage class="subtext p-error absolute pt-1" name="email" />
@@ -119,7 +122,7 @@ defineExpose({
       </div>
       <div class="grid mt-6">
         <div class="title-card col-4">
-          <label class="title-field inline-block mt-2 required">{{ t('employee.employeeid') }}</label>
+          <label class="title-field inline-block mt-2">{{ t('employee.employeeid') }}</label>
         </div>
         <div class="col-8">
           <Field
@@ -134,6 +137,7 @@ defineExpose({
                 :placeholder="t('employee.employeeid')"
                 v-bind="field"
                 :modelValue="value"
+                disabled="true"
               />
             </div>
             <ErrorMessage class="subtext p-error absolute pt-1" name="employeeid" />
@@ -142,7 +146,7 @@ defineExpose({
       </div>
       <div class="grid mt-6">
         <div class="title-card col-4">
-          <label class="title-field inline-block mt-2 required">{{ t('employee.phone') }}</label>
+          <label class="title-field inline-block mt-2">{{ t('employee.phone') }}</label>
         </div>
         <div class="col-8">
           <Field
@@ -157,6 +161,7 @@ defineExpose({
                 :placeholder="t('employee.phone')"
                 v-bind="field"
                 :modelValue="value"
+                disabled="true"
               />
             </div>
             <ErrorMessage class="subtext p-error absolute pt-1" name="phone" />
@@ -185,6 +190,7 @@ defineExpose({
                       v-bind="field"
                       :value="ele.value"
                       :modelValue="value"
+                      disabled="true"
                     />
                     <span class="px-2">{{ ele.label }}</span>
                   </label>
@@ -217,6 +223,7 @@ defineExpose({
                       v-bind="field"
                       :value="ele.value"
                       :modelValue="value"
+                      disabled="true"
                     />
                     <span class="px-2">{{ ele.label }}</span>
                   </label>
@@ -229,12 +236,12 @@ defineExpose({
       </div>
     </div>
   </div>
-  <FooterCommon
+  <!-- <FooterCommon
     :labelSubmit="t('common.register')"
     :labelCancel="t('common.back')"
     :submit="handleSubmit"
     :cancel="handleBack"
-  />
+  /> -->
 </template>
 <style scoped>
   .layout-wrapper .p-error{

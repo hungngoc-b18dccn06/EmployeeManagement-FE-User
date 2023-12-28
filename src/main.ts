@@ -42,7 +42,7 @@ import "primeicons/primeicons.css";
 import "primevue/resources/themes/lara-light-blue/theme.css";
 import "@/assets/main.css";
 import i18n from "@/i18n";
-
+import Steps from 'primevue/steps';
 const app = createApp(App);
 
 configure({
@@ -85,46 +85,47 @@ app.use(PrimeVue, {
     upload: "Upload",
     cancel: "Cancel",
     dayNames: [
-      "日曜日",
-      "月曜日",
-      "火曜日",
-      "水曜日",
-      "木曜日",
-      "金曜日",
-      "土曜日",
+      "일요일",
+      "월요일",
+      "화요일",
+      "수요일",
+      "목요일",
+      "금요일",
+      "토요일",
     ],
-    dayNamesShort: ["日", "月", "火", "水", "木", "金", "土"],
-    dayNamesMin: ["日", "月", "火", "水", "木", "金", "土"],
+    dayNamesShort: ["일", "월", "화", "수", "목", "금", "토"],
+    dayNamesMin: ["일", "월", "화", "수", "목", "금", "토"],
     monthNames: [
-      "1月",
-      "2月",
-      "3月",
-      "4月",
-      "5月",
-      "6月",
-      "7月",
-      "8月",
-      "9月",
-      "10月",
-      "11月",
-      "12月",
+      "1월",
+      "2월",
+      "3월",
+      "4월",
+      "5월",
+      "6월",
+      "7월",
+      "8월",
+      "9월",
+      "10월",
+      "11월",
+      "12월",
     ],
     monthNamesShort: [
-      "1月",
-      "2月",
-      "3月",
-      "4月",
-      "5月",
-      "6月",
-      "7月",
-      "8月",
-      "9月",
-      "10月",
-      "11月",
-      "12月",
+      "1월",
+      "2월",
+      "3월",
+      "4월",
+      "5월",
+      "6월",
+      "7월",
+      "8월",
+      "9월",
+      "10월",
+      "11월",
+      "12월",
     ],
-    today: "今日",
-    weekHeader: "週",
+    today: "오늘",
+    weekHeader: "주",
+    
     firstDayOfWeek: 0,
     dateFormat: "yy-mm-dd",
     chooseYear: "Choose Year",
@@ -235,6 +236,7 @@ app.component("InputMask", InputMask);
 app.component("InputNumber", InputNumber);
 app.component("Dialog", Dialog);
 app.component("Avatar", Avatar);
+app.component("Steps",Steps);
 app.component("Image", Image);
 app.component("Badge", Badge);
 app.component("Menu", Menu);

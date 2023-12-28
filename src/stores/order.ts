@@ -14,14 +14,15 @@ export interface Order {
   orderStatus: number;
 }
 
-export interface FormProduct {
-    id?: number;
-    employeeId: string;
-    cartItemId: string;
-    totalPrice: string;
-    methodPayment: string;
-    address: string;
-    orderStatus: number;
+export interface FormOrder {
+  id?: number;
+  employeeId: string;
+  cartItemId: string;
+  totalPrice: string;
+  methodPayment: string;
+  address: string;
+  orderDate: Date;
+  orderStatus: number;
 }
 
 export interface ParamsSearch {
@@ -38,7 +39,7 @@ interface ProductStore {
     orders: Order[];
   paramSearch: ParamsSearch;
   pagination: Pagination;
-  formPurchase: FormProduct;
+  formPurchase: FormOrder;
 }
 
 export const useOrderStore = defineStore({
@@ -56,12 +57,12 @@ export const useOrderStore = defineStore({
       },
     ],
     formPurchase: {
-        id: 0,
         employeeId: '',
         cartItemId: '',
         totalPrice: '',
         methodPayment: '',
         address: '',
+        orderDate: '',
         orderStatus: 1
     },
     paramSearch: {},
@@ -75,10 +76,10 @@ export const useOrderStore = defineStore({
     getOrders: (state: any) => state.orders,
     getPagination: (state) => state.pagination,
     getParamSearch: (state) => state.paramSearch,
-    getFormProduct: (state) => state.formPurchase
+    getFormOrder: (state) => state.formPurchase
   },
   actions: {
-    async apiPurchaseOrder(data: formPurchase){
+    async apiPurchaseOrder(data: FormOrder){
         const res = api.post(ApiConstant.PURCHASE_ORDER, data);
        return res
     },  

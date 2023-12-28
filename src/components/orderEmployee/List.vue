@@ -58,7 +58,6 @@ const addToCart = async (e) => {
   formData.append('employeeId', storeEmployee.getProfile.id)
   formData.append('productId', e.id)
   formData.append('quantity', 1)
-
   const res = await storeCart.addToCart(formData)
   storeCart.getListCart()
   toast.add({
@@ -214,6 +213,7 @@ const toggleAlt = (event) => {
                       @click="addToCart(item)"
                       :disabled="item.status === 'OUTOFSTOCK'"
                     ></Button>
+                    
                   </div>
                 </div>
               </div>
@@ -226,14 +226,7 @@ const toggleAlt = (event) => {
 </template>
 
 <style scoped>
-.card[data-v-868f36f1] {
-  background: var(--surface-card);
-  border: 1px solid var(--surface-border);
-  padding: 2rem;
-  margin-bottom: 2rem;
-  box-shadow: var(--card-shadow);
-  border-radius: 12px;
-}
+
 
 .p-rating.p-readonly {
   margin: auto;

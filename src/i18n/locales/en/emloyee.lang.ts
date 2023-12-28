@@ -3,9 +3,9 @@ const EmployeeLang = {
   aggregateOutput: "Aggregate Output",
   keywordSearch: "Keyword Search",
   dateItemSelection: "Date Item Selection",
-  selectDateItem: "Please Select",
+  selectDateItem: "Status Employee",
   exist: "Exist",
-  distribution: "Position",
+  distribution: "Role",
   clear: "Clear",
   pageNavigation: "Page Navigation",
   rowsPerPage: "Rows per Page",
@@ -40,7 +40,9 @@ const EmployeeLang = {
   cod: "Cash On Delivery",
   invoice: "Total invoice",
   giftCode: "Enter employee code to receive discount code",
-  
+  created_at: "Created at",
+  date_of_birth: "Date of birth",
+  createdAt: "Created at",
 
   };
   export default EmployeeLang;
