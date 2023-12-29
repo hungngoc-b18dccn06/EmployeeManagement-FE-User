@@ -94,6 +94,4 @@ export const LIST_CART_ITEM =  `/api/cart/cart-items`;
 
 //order:
 export const PURCHASE_ORDER =  `/api/cart/purchaseOrder`;
-
-
-
+export const GET_ORDER_LIST =  "/api/orders/list";

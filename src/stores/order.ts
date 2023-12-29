@@ -6,14 +6,15 @@ import CONST, { ApiConstant, DEFAULT } from "@/const";
 
 export interface Order {
   id?: number;
-  employeeId: string;
-  cartItemId: string;
+  employeeid: string;
+  employeename: string;
+  cartItemId: number;
+  orderDate: string;
   totalPrice: string;
   methodPayment: string;
-  address: string;
+  address: String;
   orderStatus: number;
 }
-
 export interface FormOrder {
   id?: number;
   employeeId: string;
@@ -36,7 +37,7 @@ export interface Pagination {
 }
 
 interface ProductStore {
-    orders: Order[];
+  orders: Order[];
   paramSearch: ParamsSearch;
   pagination: Pagination;
   formPurchase: FormOrder;
@@ -48,12 +49,14 @@ export const useOrderStore = defineStore({
     orders: [
       {
         id: 0,
-        employeeId: '',
-        cartItemId: '',
+        employeeid: '',
+        employeename: '',
+        cartItemId: 1,
+        orderDate: '',
         totalPrice: '',
         methodPayment: '',
         address: '',
-        orderStatus: 1
+        orderStatus: DEFAULT.INVENTORY_STATUS[1].value,
       },
     ],
     formPurchase: {
@@ -81,7 +84,23 @@ export const useOrderStore = defineStore({
   actions: {
     async apiPurchaseOrder(data: FormOrder){
         const res = api.post(ApiConstant.PURCHASE_ORDER, data);
+        console.log(res)
        return res
     },  
+
+    async getListOrder(page?: number) {
+      const listOrder = await api.get(ApiConstant.GET_ORDER_LIST);
+     
+      const updatedOrderList = listOrder.data.map(orders => ({
+        ...orders,
+        cartItemId: orders.cartItem.id,
+        employeeId: orders.employee.employeeid ,
+        orderDate:  new Date(orders.orderDate).toISOString().split('T')[0],
+      }));
+      this.orders = updatedOrderList;
+      console.log(this.orders)
+    },
   },
+
+
 });
