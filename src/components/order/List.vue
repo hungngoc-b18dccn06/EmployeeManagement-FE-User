@@ -21,9 +21,9 @@ import InputGroupAddon from 'primevue/inputgroupaddon'
 import Steps from 'primevue/steps';
 
 import * as yup from "yup";
+const storeOrder = useOrderStore();
 const visible = ref(false)
 const storeCart = useCartItemStore()
-const storeOrder = useOrderStore()
 const storeEmployee = useUserStore()
 const toast = useToast()
 const { t } = useI18n()
@@ -43,7 +43,7 @@ const statuses = ref([
 ])
 const storeProduct = useProductStore()
 const producImage = ref()
-
+const dateOrder = ref()
 onBeforeMount(() => {
   initFilters()
 })
@@ -53,6 +53,7 @@ onMounted(() => {
   storeOrder.getOrders.methodPayment = selectedMethod.value
   storeProduct.getListProduct()
   storeCart.getListCart()
+  storeOrder.getListOrder();
 })
 
 const openNew = () => {
@@ -226,10 +227,7 @@ const purchaseOrder = async() => {
   storeOrder.getFormOrder.orderStatus = 1;
   storeOrder.getFormOrder.orderDate = getCurrentDate();
   storeOrder.getFormOrder.address = storeOrder.getOrders.address;
-  console.log(storeOrder.getFormOrder)
   const response = await storeOrder.apiPurchaseOrder(storeOrder.getFormOrder)
-
-
   toast.add({
     group: 'message',
     severity: 'success',
@@ -238,14 +236,22 @@ const purchaseOrder = async() => {
     closable: false
   })
   visible.value = false;
+  storeOrder.getListOrder()
   storeCart.getListCart();
+}
+
+
+function mappingCartOrder() {
+  const orders = storeOrder.getOrders;
+
+  
 }
 </script>
 
 <template>
   <div class="grid">
     <div class="col-12">
-      <div class="card order-card">
+      <div class="card order-card" v-if="storeCart.getCart.length > 0">
         <Toast />
         <DataTable
           ref="dt"
@@ -390,14 +396,14 @@ const purchaseOrder = async() => {
         </Dialog>
       </div>
       <div>
-        <Card v-if="storeCart.getCart[0].status == 0">
+        <Card v-if="storeCart.getCart[0]?.status == 0">
           <template #title> {{  t('employee.invoice') }} </template>
           <template #content>
             <InputGroup>
               <InputNumber :placeholder="t('employee.giftCode')" />
               <InputGroupAddon>Code</InputGroupAddon>
             </InputGroup>
-            <div class="total-price">
+            <div class="total-price" >
               <div>
                   <p>{{ t('employee.discount') }} :</p>
                   <p>{{ t('employee.toTalPrice') }}:</p>
@@ -490,9 +496,10 @@ const purchaseOrder = async() => {
             </Dialog>
           </template>
         </Card>
-        <div class="card-steps mt-3" v-if="storeCart.getCart[0].status == 1">
-          <span class="delivery-info">DELIVER INFOMATION :</span>
-           <Steps :model="items"  />
+
+        <div class="card-steps mt-3" v-for="(item, idx) in storeOrder.getOrders.reverse()" :key="idx">
+            <span class="delivery-info">DELIVER INFOMATION : {{ item.orderDate }}</span>
+             <Steps :model="items"  />
         </div>
       </div>
     </div>

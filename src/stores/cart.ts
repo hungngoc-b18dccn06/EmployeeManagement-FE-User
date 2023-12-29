@@ -69,7 +69,8 @@ export const useCartItemStore = defineStore({
         const listCart = await api.get(ApiConstant.LIST_CART_ITEM);
         const current_id = localStorage.getItem("employeeId")
         
-        const userCart = listCart.data.filter(item => item.employeeId == current_id);
+        const userCart = listCart.data.filter(item => item.employeeId == current_id && item.status != 1);
+      
         this.cart = userCart;
     },
 
