@@ -19,23 +19,30 @@ const { t } = useI18n()
 const toast = useToast()
 const router = useRouter()
 const schema = yup.object({
-  first_name: yup
+  employeeid: yup
     .string()
     .trim()
     .required(t('message.required'))
     .max(100, t('message.maxLength100')),
-  last_name: yup
+  employeename: yup
+    .string()
+    .matches(/^[A-Za-z\s]+$/, t('message.namePattern'))
+    .required(t('message.nameRequired')),
+  phone: yup
     .string()
     .trim()
-    .required(t('message.required'))
-    .max(100, t('message.maxLength100')),
+    .matches(/^\S*$/, 'Phone cannot contain spaces')
+    .matches(/^[0-9]+$/, t('message.phonePattern'))
+    .required(t('message.phoneRequired')),
+
   email: yup
     .string()
     .trim()
     .required(t('message.required'))
-    .matches(CONST.REGEX_EMAIL, t('message.emailInvalid'))
-    .max(100, t('message.maxLength100')),
+    .email(t('message.emailInvalid'))
+    .max(100, t('message.maxLength100'))
 })
+
 const { errors, validate } = useForm({
   validationSchema: schema
 })

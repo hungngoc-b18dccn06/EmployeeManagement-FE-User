@@ -151,28 +151,23 @@ const findIndexById = (id) => {
   }
   return index
 }
-const items = ref([
-    {
-        label: 'Unpaid'
-    },
-    {
-        label: 'To Ship'
-    },
-    {
-        label: 'Shipped'
-    },
-    {
-        label: 'To review'
-    }
-]);
-const createId = () => {
-  let id = ''
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-  for (let i = 0; i < 5; i++) {
-    id += chars.charAt(Math.floor(Math.random() * chars.length))
-  }
-  return id
-}
+const generateStepsModel = (status) => {
+  const items = [
+    { label: 'Unpaid', value: 1 },
+    { label: 'To Ship', value: 2 },
+    { label: 'Shipped', value: 3 },
+    { label: 'To review', value: 4 },
+  ];
+
+  const activeStepIndex = items.findIndex((step) => step.value === status);
+
+  return items.map((step, index) => ({
+    ...step,
+    status: index === activeStepIndex ? 'active' : 'wait',
+  }));
+};
+
+
 const handlePayMent = () =>{
   storeOrder.getOrders.methodPayment = selectedMethod.value
 }
@@ -186,6 +181,7 @@ const { values, errors, validate, handleSubmit } = useForm({
     validationSchema: schema,
 });
 const tapToPay = handleSubmit(async (data) => {
+  storeOrder.getOrders.methodPayment = selectedMethod.value
   visible.value = true
 });
 const exportCSV = () => {
@@ -498,8 +494,9 @@ function mappingCartOrder() {
         </Card>
 
         <div class="card-steps mt-3" v-for="(item, idx) in storeOrder.getOrders.reverse()" :key="idx">
+          {{ item.orderStatus }}
             <span class="delivery-info">DELIVER INFOMATION : {{ item.orderDate }}</span>
-             <Steps :model="items"  />
+            <Steps :model="generateStepsModel(item.status)" />
         </div>
       </div>
     </div>
