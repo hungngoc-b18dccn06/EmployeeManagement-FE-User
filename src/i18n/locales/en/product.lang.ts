@@ -27,7 +27,9 @@ const ProductLang = {
     lgEcommerce: "LG Ecommerce",
     totalPrice: "Total Price",
     order:"Order Infomation",
-    noteConfirmOrder: "Please inquire for payment !!"
+    noteConfirmOrder: "Please inquire for payment !!",
+    noAmount: "There are no products in your shopping cart !",
+
 };
 export default ProductLang;
   

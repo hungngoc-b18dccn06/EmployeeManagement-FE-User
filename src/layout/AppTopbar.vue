@@ -58,7 +58,7 @@
                     ref="cartList"
                     class="h-full max-w-bd-sm mx-auto relative overflow-auto"
                   >
-                    <ul class="px-2 pt-20">
+                    <ul class="px-2 pt-20" v-if="totalQuantity > 0">
                       <li
                         v-for="item of storeCart.getCart"
                         :key="item.cartItemId"
@@ -87,6 +87,7 @@
                         </div>
                       </li>
                     </ul>
+                    <span v-else>{{ t('product.noAmount') }}</span>
                   </div>
                   <Button class="go_order" @click="goToOrder()"
                     >{{ t('label.goToOrder') }}<i class="pi pi-fast-forward ml-2"></i
@@ -166,9 +167,8 @@ const showDropdown = ref(false)
 const toggle = (event: any) => {
   menu.value.toggle(event)
 }
-const toggleAlt = (event) => {
+const toggleAlt = (event : any) => {
   op.value.toggle(event)
-  console.log(listItem)
 }
 const changeLanguage = (e: any) => {
   i18n.global.locale.value = e

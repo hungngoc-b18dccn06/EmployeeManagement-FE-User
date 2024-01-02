@@ -27,6 +27,7 @@ const ProductLang = {
     lgEcommerce: "LG전자상거래",
     totalPrice: "총 가격",
     order:"주문 정보",
-    noteConfirmOrder: "결제문의주세요!!"
+    noteConfirmOrder: "결제문의주세요!!",
+    noAmount: "장바구니에 담긴 상품이 없습니다!",
 };
 export default ProductLang;
