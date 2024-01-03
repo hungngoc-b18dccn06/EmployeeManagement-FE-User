@@ -13,9 +13,7 @@
                 <Field name="employeeid" v-slot="{ meta: metaField, field, errorMessage }">
                   <div class="p-inputgroup common-group">
                     <div class="title-card col-4">
-                      <label class="title-field mt-2">{{
-                        t('employee.employeeid')
-                      }}</label>
+                      <label class="title-field mt-2">{{ t('employee.employeeid') }}</label>
                     </div>
                     <InputText
                       v-bind="field"
@@ -51,6 +49,14 @@
                       :placeholder="t('user.emailAdress')"
                       autocomplete="off"
                     />
+                    <span v-if="selectedExtension && selectedExtension.name != 'other'">@</span>
+                    <Dropdown
+                      v-model="selectedExtension"
+                      :options="extensionEmail"
+                      optionLabel="name"
+                      placeholder="Extension"
+                      class="w-full md:w-14rem"
+                    />
                   </div>
                   <div class="absolute line-height-1 pt-2">
                     <small
@@ -70,7 +76,9 @@
                     <span class="p-input-icon-right w-full">
                       <InputText
                         v-bind="field"
-                        :class="{'w-full p-invalid': errorMessage && !metaField.valid && metaField.touched}"
+                        :class="{
+                          'w-full p-invalid': errorMessage && !metaField.valid && metaField.touched
+                        }"
                         :placeholder="t('employee.password')"
                         aria-describedby="password-help"
                         autocomplete="current-password"
@@ -101,7 +109,9 @@
                     <span class="p-input-icon-right w-full">
                       <InputText
                         v-bind="field"
-                        :class="{'w-full p-invalid': errorMessage && !metaField.valid && metaField.touched}"
+                        :class="{
+                          'w-full p-invalid': errorMessage && !metaField.valid && metaField.touched
+                        }"
                         :placeholder="t('employee.password_confirm')"
                         aria-describedby="password-help"
                         autocomplete="current-password"
@@ -128,9 +138,7 @@
                 <Field name="employeename" v-slot="{ meta: metaField, field, errorMessage }">
                   <div class="p-inputgroup common-group">
                     <div class="title-card col-4">
-                      <label class="title-field mt-2">{{
-                        t('employee.employee_name')
-                      }}</label>
+                      <label class="title-field mt-2">{{ t('employee.employee_name') }}</label>
                     </div>
                     <InputText
                       v-bind="field"
@@ -206,7 +214,7 @@ import type { RequestRegist } from '@/const/api.const'
 import PAGE_ROUTE from '@/const/pageRoute'
 import type { AxiosResponse } from 'axios'
 import { useToast } from 'primevue/usetoast'
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, reactive, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { Field, useForm } from 'vee-validate'
 import { useI18n } from 'vue-i18n'
@@ -216,6 +224,7 @@ const router = useRouter()
 const state = reactive({
   loading: false
 })
+const selectedExtension = ref({ name: 'gmail.com' })
 const modal = ref<InstanceType<typeof Popup> | null>(null)
 const submitted = ref(false)
 const showPass = ref(false)
@@ -229,6 +238,15 @@ onMounted(() => {
 const openModal = () => {
   modal.value?.open()
 }
+const computedEmail = computed(() => {
+  if (selectedExtension.value && selectedExtension.value.name !== 'other') {
+    // Nối giá trị từ input và extensionEmail.name đã chọn
+    return `${values.email}@${selectedExtension.value.name}`;
+  } else {
+    // Trường hợp khi extension không phải 'other'
+    return values.email;
+  }
+});
 const schema = yup.object({
   employeeid: yup
     .string()
@@ -263,15 +281,20 @@ const schema = yup.object({
     .matches(/^\S*$/, 'Phone cannot contain spaces')
     .matches(/^[0-9]+$/, t('message.phonePattern'))
     .required(t('message.phoneRequired')),
-
   email: yup
     .string()
     .trim()
     .required(t('message.required'))
-    .email(t('message.emailInvalid'))
-    .matches(/@(naver\.com|daum\.net|gmail\.com|nate\.com|hotmail\.com)$/, t('message.emailDomain'))
     .max(100, t('message.maxLength100'))
 })
+const extensionEmail = ref([
+  { name: 'naver.com' },
+  { name: 'daum.net' },
+  { name: 'gmail.com' },
+  { name: 'nate.com' },
+  { name: 'Hotmail.com' },
+  { name: 'other' }
+])
 
 const { resetForm, values, errors, handleSubmit } = useForm({
   validationSchema: schema,
@@ -298,9 +321,14 @@ const cleanData = (data) => {
 const handleSubmitForm = handleSubmit(async (data) => {
   const cleanedData = cleanData(data)
   submitted.value = true
+  const emailValue = selectedExtension.value && selectedExtension.value.name !== 'other'
+    ? `${cleanedData.email}@${selectedExtension.value.name}`
+    : cleanedData.email;
   const user = {
-    ...cleanedData
+    ...cleanedData,
+    email: emailValue,
   }
+ 
   state.loading = true
   try {
     const response: AxiosResponse<RequestRegist> = await api.post(ApiConstant.REGISTER, user)
@@ -469,11 +497,11 @@ i.pi.pi-eye {
   min-height: 700px;
 }
 .flex.w-full.my-2.justify-content-center.font-bold.text-2xl {
-    padding-left: 15%;
-    font-size: 30px !important;
+  padding-left: 15%;
+  font-size: 30px !important;
 }
 .absolute.line-height-1.pt-2 {
-    padding-left: 49%;
-    width: 125%;
+  padding-left: 49%;
+  width: 130%;
 }
 </style>

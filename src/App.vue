@@ -17,9 +17,9 @@ watch(
 onMounted(
   () => {
     const token = localStorage.getItem("access_token");
-    // if(!token){
-    //   router.push(`/auth/signin`);
-    // }
+    if(!token){
+      router.push(`/auth/signin`);
+    }
   }
 )
 </script>

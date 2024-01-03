@@ -29,6 +29,8 @@ const ProductLang = {
     order:"Order Infomation",
     noteConfirmOrder: "Please inquire for payment !!",
     noAmount: "There are no products in your shopping cart !",
+    continueS: "Continue shopping",
+    tapPay:  "Tap to Pay",
 
 };
 export default ProductLang;

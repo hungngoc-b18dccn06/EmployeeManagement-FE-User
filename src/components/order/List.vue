@@ -15,13 +15,13 @@ import { useCartItemStore } from '@/stores/cart'
 import { useOrderStore } from '@/stores/order'
 import Momo from '../../assets/img/momoQR.jpg'
 import Cod from '../../assets/img/cod-delivery.avif'
-import { Field, useForm } from "vee-validate";
+import { Field, useForm } from 'vee-validate'
 import InputGroup from 'primevue/inputgroup'
+import { useRoute, useRouter } from "vue-router";
 import InputGroupAddon from 'primevue/inputgroupaddon'
-import Steps from 'primevue/steps';
-
-import * as yup from "yup";
-const storeOrder = useOrderStore();
+import Steps from 'primevue/steps'
+import * as yup from 'yup'
+const storeOrder = useOrderStore()
 const visible = ref(false)
 const storeCart = useCartItemStore()
 const storeEmployee = useUserStore()
@@ -41,6 +41,7 @@ const statuses = ref([
   { label: 'LOWSTOCK', value: 2 },
   { label: 'OUTOFSTOCK', value: 3 }
 ])
+const router = useRouter();
 const storeProduct = useProductStore()
 const producImage = ref()
 const dateOrder = ref()
@@ -53,7 +54,7 @@ onMounted(() => {
   storeOrder.getOrders.methodPayment = selectedMethod.value
   storeProduct.getListProduct()
   storeCart.getListCart()
-  storeOrder.getListOrder();
+  storeOrder.getListOrder()
 })
 
 const openNew = () => {
@@ -139,7 +140,7 @@ const load = () => {
     loading.value = false
   }, 2000)
 }
-const addressToOrder = ref();
+const addressToOrder = ref()
 const selectedMethod = ref('momo')
 const findIndexById = (id) => {
   let index = -1
@@ -156,34 +157,30 @@ const generateStepsModel = (status) => {
     { label: 'Unpaid', value: 1 },
     { label: 'To Ship', value: 2 },
     { label: 'Shipped', value: 3 },
-    { label: 'To review', value: 4 },
-  ];
+    { label: 'To review', value: 4 }
+  ]
 
-  const activeStepIndex = items.findIndex((step) => step.value === status);
+  const activeStepIndex = items.findIndex((step) => step.value === status)
 
   return items.map((step, index) => ({
     ...step,
-    status: index === activeStepIndex ? 'active' : 'wait',
-  }));
-};
+    status: index === activeStepIndex ? 'active' : 'wait'
+  }))
+}
 
-
-const handlePayMent = () =>{
+const handlePayMent = () => {
   storeOrder.getOrders.methodPayment = selectedMethod.value
 }
 const schema = yup.object({
-    address: yup
-      .string()
-      .required(t('message.required'))
-      
-});
+  address: yup.string().required(t('message.required'))
+})
 const { values, errors, validate, handleSubmit } = useForm({
-    validationSchema: schema,
-});
+  validationSchema: schema
+})
 const tapToPay = handleSubmit(async (data) => {
   storeOrder.getOrders.methodPayment = selectedMethod.value
   visible.value = true
-});
+})
 const exportCSV = () => {
   dt.value.exportCSV()
 }
@@ -210,19 +207,20 @@ const totalAmount = computed(() => {
   }, 0)
 })
 const getCurrentDate = () => {
-  const currentDate = new Date();
-  return currentDate;
-};
-
-const purchaseOrder = async() => {
-
-  storeOrder.getFormOrder.employeeId = storeEmployee.getProfile.employeeid;
-  storeOrder.getFormOrder.cartItemId = storeCart.getCart[0].cartItemId;
-  storeOrder.getFormOrder.totalPrice = totalAmount.value;
-  storeOrder.getFormOrder.methodPayment = selectedMethod.value;
-  storeOrder.getFormOrder.orderStatus = 1;
-  storeOrder.getFormOrder.orderDate = getCurrentDate();
-  storeOrder.getFormOrder.address = storeOrder.getOrders.address;
+  const currentDate = new Date()
+  return currentDate
+}
+const gotoShopping = () =>{
+  router.push(`/`);
+}
+const purchaseOrder = async () => {
+  storeOrder.getFormOrder.employeeId = storeEmployee.getProfile.employeeid
+  storeOrder.getFormOrder.cartItemId = storeCart.getCart[0].cartItemId
+  storeOrder.getFormOrder.totalPrice = totalAmount.value
+  storeOrder.getFormOrder.methodPayment = selectedMethod.value
+  storeOrder.getFormOrder.orderStatus = 1
+  storeOrder.getFormOrder.orderDate = getCurrentDate()
+  storeOrder.getFormOrder.address = storeOrder.getOrders.address
   const response = await storeOrder.apiPurchaseOrder(storeOrder.getFormOrder)
   toast.add({
     group: 'message',
@@ -231,16 +229,13 @@ const purchaseOrder = async() => {
     life: CONST.TIME_DELAY,
     closable: false
   })
-  visible.value = false;
+  visible.value = false
   storeOrder.getListOrder()
-  storeCart.getListCart();
+  storeCart.getListCart()
 }
 
-
 function mappingCartOrder() {
-  const orders = storeOrder.getOrders;
-
-  
+  const orders = storeOrder.getOrders
 }
 </script>
 
@@ -391,19 +386,36 @@ function mappingCartOrder() {
           </template>
         </Dialog>
       </div>
+      <div v-if="storeCart.getCart.length == 0"> 
+        <Card>
+          <template #content>
+            <span style="margin: auto; display:flex; justify-content: center;">
+              {{ t('product.noAmount') }}
+            </span>
+            <Button
+              type="button"
+              :label="t('product.continueS')"
+              icon="pi pi-shopping-cart mr-2"
+              :loading="loading"
+              @click="gotoShopping()"
+              class="payment"
+            />
+          </template>
+        </Card>
+      </div>
       <div>
         <Card v-if="storeCart.getCart[0]?.status == 0">
-          <template #title> {{  t('employee.invoice') }} </template>
+          <template #title> {{ t('employee.invoice') }} </template>
           <template #content>
             <InputGroup>
               <InputNumber :placeholder="t('employee.giftCode')" />
               <InputGroupAddon>Code</InputGroupAddon>
             </InputGroup>
-            <div class="total-price" >
+            <div class="total-price">
               <div>
-                  <p>{{ t('employee.discount') }} :</p>
-                  <p>{{ t('employee.toTalPrice') }}:</p>
-                  <p>{{ t('employee.Address') }} :</p>
+                <p>{{ t('employee.discount') }} :</p>
+                <p>{{ t('employee.toTalPrice') }}:</p>
+                <p>{{ t('employee.Address') }} :</p>
                 <p class="mt-7">{{ t('employee.paymentMethod') }}</p>
               </div>
               <div>
@@ -411,32 +423,47 @@ function mappingCartOrder() {
                 <p>{{ totalAmount * 0.9 }} $</p>
                 <p>
                   <span class="p-input-icon-right">
-                    <Field name="address" v-slot="{meta: metaField, field, errorMessage}">
-                              <InputText
-                                  v-bind="field"
-                                  type="text"
-                                  v-model="storeOrder.getOrders.address"
-                                  :class="{'p-invalid': errorMessage && !metaField.valid && metaField.touched}"
-                                  :placeholder="t('employee.Address') "
-                                  autocomplete="off"
-                              />
-                              <div class="absolute line-height-1 pt-2">
-                                <small v-if="errorMessage && !metaField.valid && metaField.touched" class="p-error">{{ errorMessage }}</small>
-                              </div>
-                          </Field>
-                   
+                    <Field name="address" v-slot="{ meta: metaField, field, errorMessage }">
+                      <InputText
+                        v-bind="field"
+                        type="text"
+                        v-model="storeOrder.getOrders.address"
+                        :class="{
+                          'p-invalid': errorMessage && !metaField.valid && metaField.touched
+                        }"
+                        :placeholder="t('employee.Address')"
+                        autocomplete="off"
+                      />
+                      <div class="absolute line-height-1 pt-2">
+                        <small
+                          v-if="errorMessage && !metaField.valid && metaField.touched"
+                          class="p-error"
+                          >{{ errorMessage }}</small
+                        >
+                      </div>
+                    </Field>
                   </span>
                 </p>
                 <div class="card flex justify-content-center mt-5">
                   <div class="card flex justify-content-center">
                     <div class="flex flex-column gap-3">
                       <div class="flex align-items-center">
-                        <RadioButton v-model="selectedMethod" inputId="momo" value="momo" @change="handlePayMent" />
+                        <RadioButton
+                          v-model="selectedMethod"
+                          inputId="momo"
+                          value="momo"
+                          @change="handlePayMent"
+                        />
                         <img src="../../assets/img/momo.webp" class="momo-wallet" />
                         <label for="momo">{{ t('employee.momo') }}</label>
                       </div>
                       <div class="flex align-items-center">
-                        <RadioButton v-model="selectedMethod" inputId="cod" value="cod"  @change="handlePayMent"  />
+                        <RadioButton
+                          v-model="selectedMethod"
+                          inputId="cod"
+                          value="cod"
+                          @change="handlePayMent"
+                        />
                         <img src="../../assets/img/code.png" class="cod-wallet" />
                         <label for="cod" class="ml-2">{{ t('employee.cod') }}</label>
                       </div>
@@ -447,7 +474,7 @@ function mappingCartOrder() {
             </div>
             <Button
               type="button"
-              label="Tap To Pay"
+              :label="t('product.tapPay')"
               icon="pi pi-credit-card mr-2"
               :loading="loading"
               @click="tapToPay()"
@@ -460,9 +487,17 @@ function mappingCartOrder() {
               :style="{ width: '50rem' }"
               :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
             >
-              <img v-if="storeOrder.getOrders.methodPayment == 'momo'" :src="Momo" class="pay_momo pb-5" />
-              <img v-if="storeOrder.getOrders.methodPayment == 'cod'" :src="Cod" class="pay_momo pb-5" />
-              <span class="invoice">{{  t('employee.invoice') }} :</span>
+              <img
+                v-if="storeOrder.getOrders.methodPayment == 'momo'"
+                :src="Momo"
+                class="pay_momo pb-5"
+              />
+              <img
+                v-if="storeOrder.getOrders.methodPayment == 'cod'"
+                :src="Cod"
+                class="pay_momo pb-5"
+              />
+              <span class="invoice">{{ t('employee.invoice') }} :</span>
               <div class="flex info-payment">
                 <div class="info-title">
                   <p>{{ t('employee.discount') }} :</p>
@@ -492,11 +527,38 @@ function mappingCartOrder() {
             </Dialog>
           </template>
         </Card>
-
-        <div class="card-steps mt-3" v-for="(item, idx) in storeOrder.getOrders.reverse()" :key="idx">
-          {{ item.orderStatus }}
-            <span class="delivery-info">DELIVER INFOMATION : {{ item.orderDate }}</span>
-            <Steps :model="generateStepsModel(item.status)" />
+        <div class="title-order">
+            <h3 style="padding-top: 20px;max-width: 1000px; margin: auto; text-decoration: underline;">History Order</h3>
+        </div>
+        <div
+          class="card-steps mt-3"
+          v-for="(item, idx) in storeOrder.getOrders.reverse()"
+          :key="idx"
+        >
+          <span class="delivery-info">DELIVER INFOMATION : {{ item.orderDate }}</span>
+          <div class="info-deliver">
+            <div class="line-deco"></div>
+            <div class="item-delivery">
+              <span :class="item.orderStatus === 1 ? 'active-delivery' : 'amount-round'" style="margin-left:4px;">1</span>
+              <span class="status-name">Unpaid</span>
+           </div>
+            <div class="line-deco"></div>
+            <div class="item-delivery">
+              <span :class="item.orderStatus === 2 ? 'active-delivery' : 'amount-round'" style="margin-left: 6px;">2</span>
+              <span class="status-name">To Ship</span>
+            </div>
+            <div class="line-deco"></div>
+            <div class="item-delivery">
+              <span :class="item.orderStatus === 3 ? 'active-delivery' : 'amount-round'" style="margin-left:6px ;">3</span>
+              <span class="status-name">Shipped</span>
+            </div>
+            <div class="line-deco"></div>
+            <div class="item-delivery">
+              <span :class="item.orderStatus === 4 ? 'active-delivery' : 'amount-round'" style="margin-left:6px;">4</span>
+              <span class="status-name">Review</span>
+            </div>
+            <div class="line-deco"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -504,34 +566,71 @@ function mappingCartOrder() {
 </template>
 
 <style scoped>
-.delivery-info{
+.item-delivery {
+    margin: auto;
+}
+.active-delivery{
+  background: #3b82f6;
+  color: #fff;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  padding-top: 7px;
+}
+div.line-deco {
+    width: 150px;
+    height: 2px;
+    color: black;
+    background: black;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin-top: 20px;
+}
+.info-deliver {
+  display: flex;
+}
+span.amount-round {
+  height: 40px;
+  width: 40px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  padding-top: 7px;
+  border: 1px solid black;
+  color: #4b5563;
+}
+.delivery-info {
   color: red;
   text-decoration: underline;
-    font-size: 20px;
-    font-weight: bold;
+  font-size: 20px;
+  font-weight: bold;
 }
 .card-steps {
-    max-width: 1000px;
-    margin: auto;
-    border: 1px solid #e5e7eb;
-    border-width: 0 0 1px 0;
-    padding-top: 20px;
-    padding-left: 20px;
-    padding-bottom: 20px;
-    box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.102);
-    border-radius: 10px;
-    background-color: #fff;
+  max-width: 1000px;
+  margin: auto;
+  border: 1px solid #e5e7eb;
+  border-width: 0 0 1px 0;
+  padding-top: 20px;
+  padding-left: 20px;
+  padding-bottom: 20px;
+  box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.102);
+  border-radius: 10px;
+  background-color: #fff;
 }
 nav.p-steps.p-component.p-readonly {
-    padding-right: 100px;
+  padding-right: 100px;
 }
 
 span.invoice {
-    font-size: 25px;
-    color: red;
-    font-weight: bold;
-    margin-left: 11%;
-    text-decoration: underline;
+  font-size: 25px;
+  color: red;
+  font-weight: bold;
+  margin-left: 11%;
+  text-decoration: underline;
 }
 .pay_momo {
   width: 50%;
@@ -542,7 +641,6 @@ textarea#description {
   height: 120px !important;
 }
 .info-title p {
-  
   font-size: 20px;
 }
 .flex.info-payment {
