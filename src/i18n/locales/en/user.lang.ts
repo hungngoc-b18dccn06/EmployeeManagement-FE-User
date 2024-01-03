@@ -93,7 +93,7 @@ const UserLang = {
   requiredUserName: "Please enter your email username.",
   requiredIssueLocation: "Please enter the issue location.",
   backToHome: "Back to home",
-  headerConfirmLogout: "header logout",
+  headerConfirmLogout: "Logout",
   forgot: "Forgot Password",
   send: "Send",
   titleEmailForgot: "Resetting a password",

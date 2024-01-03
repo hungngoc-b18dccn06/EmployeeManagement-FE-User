@@ -104,7 +104,7 @@
                 <Field name="password_confirm" v-slot="{ meta: metaField, field, errorMessage }">
                   <div class="p-inputgroup common-group">
                     <div class="title-card col-4">
-                      <label class="title-field mt-2">{{ t('employee.password') }}</label>
+                      <label class="title-field mt-2">{{ t('employee.password_confirm') }}</label>
                     </div>
                     <span class="p-input-icon-right w-full">
                       <InputText
