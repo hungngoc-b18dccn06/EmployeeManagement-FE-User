@@ -583,7 +583,7 @@ div.line-deco {
     width: 150px;
     height: 2px;
     color: black;
-    background: black;
+    background: rgb(143 141 141);
     display: flex;
     justify-content: center;
     text-align: center;

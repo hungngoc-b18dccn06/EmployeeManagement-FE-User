@@ -1,8 +1,7 @@
 import { defineStore } from "pinia";
 import api from "@/api";
 import { format } from "date-fns";
-import CONST, { ApiConstant, DEFAULT } from "@/const";
-import { da } from "date-fns/locale";
+import { ApiConstant, DEFAULT } from "@/const";
 
 export interface CartItem {
   id?: number;
@@ -68,6 +67,7 @@ export const useCartItemStore = defineStore({
     async getListCart() {
         const listCart = await api.get(ApiConstant.LIST_CART_ITEM);
         const current_id = localStorage.getItem("employeeId")
+        console.log(listCart.data)
         
         const userCart = listCart.data.filter(item => item.employeeId == current_id && item.status != 1);
       

@@ -19,7 +19,7 @@
                   :src="selectedLanguage.imgSrc"
                   alt=""
                   class="img-language"
-                  style="height: 30px; width: 35px;margin-top: 5px;"
+                  style="height: 35px; width: 50px;"
                 />
               </div>
               <div class="drop-multil-language">
