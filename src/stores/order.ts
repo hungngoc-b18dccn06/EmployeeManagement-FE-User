@@ -96,13 +96,7 @@ export const useOrderStore = defineStore({
         }));
 
       this.orders = filteredOrderList;
-      const uniqueEmployeeIds = new Set();
-      listOrder.data.forEach((order) => {
-        uniqueEmployeeIds.add(order.employee.employeeid);
-      });
-      console.log((uniqueEmployeeIds.size))
-      this.getAmount = uniqueEmployeeIds.size;
+      
     },
-
   }
 });
